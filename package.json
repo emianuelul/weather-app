@@ -1,0 +1,35 @@
+{
+  "name": "form-js-validation",
+  "version": "1.0.0",
+  "description": "practice for validating html forms inside js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve --open --config webpack.dev.js",
+    "deploy": "git checkout gh-pages && git merge main --no-edit && npm run build && git add dist -f && git commit -m 'Deployment commit' && git subtree push --prefix dist origin gh-pages && git checkout main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emianuelul/form-js-validation.git"
+  },
+  "keywords": [
+    "form"
+  ],
+  "author": "Emanuel Marin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emianuelul/form-js-validation/issues"
+  },
+  "homepage": "https://github.com/emianuelul/form-js-validation#readme",
+  "dependencies": {
+    "css-loader": "^7.1.2",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.4",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-merge": "^6.0.1"
+  }
+}

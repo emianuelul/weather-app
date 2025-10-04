@@ -1,7 +1,7 @@
 {
-  "name": "form-js-validation",
+  "name": "weather-app",
   "version": "1.0.0",
-  "description": "practice for validating html forms inside js",
+  "description": "weather app to learn use of API's and async functions",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,7 +22,7 @@
     "url": "https://github.com/emianuelul/form-js-validation/issues"
   },
   "homepage": "https://github.com/emianuelul/form-js-validation#readme",
-  "dependencies": {
+  "devDependencies": {
     "css-loader": "^7.1.2",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.4",

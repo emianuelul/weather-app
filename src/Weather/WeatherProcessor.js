@@ -17,7 +17,8 @@ export default class WeatherProcessor {
       const json = await data.json();
       return json;
     } catch (err) {
-      console.error('Erorr: ', err);
+      console.log('Invalid location');
+      return;
     }
   }
 }

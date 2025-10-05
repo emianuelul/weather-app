@@ -1,0 +1,48 @@
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+#bg-img {
+  position: absolute;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+
+  transition: 0.25s;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 100vh;
+
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+#options,
+#weather-info,
+#week-forecast {
+  background-color: rgba(256, 256, 256, 0.2);
+  backdrop-filter: blur(16px);
+  padding: 16px 32px;
+
+  border-radius: 24px;
+  border-top: 2.5px solid rgba(256, 256, 256, 0.2);
+  border-left: 2.5px solid rgba(256, 256, 256, 0.2);
+  border-right: 2.5px solid rgba(154, 154, 154, 0.2);
+  border-bottom: 2.5px solid rgba(154, 154, 154, 0.4);
+}
+
+#options {
+  justify-self: self-start;
+  border-radius: 0 24px 24px 0;
+}
+
+#week-forecast {
+  justify-self: self-end;
+  border-radius: 24px 0 0 24px;
+}

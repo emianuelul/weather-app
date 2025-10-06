@@ -26,9 +26,9 @@ body {
 #options,
 #weather-info,
 #week-forecast {
-  background-color: rgba(256, 256, 256, 0.2);
+  background-color: rgba(256, 256, 256, 0.1);
   backdrop-filter: blur(16px);
-  padding: 16px 32px;
+  padding: 24px 32px;
 
   border-radius: 24px;
   border-top: 2.5px solid rgba(256, 256, 256, 0.2);
@@ -37,9 +37,100 @@ body {
   border-bottom: 2.5px solid rgba(154, 154, 154, 0.4);
 }
 
+#weather-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 16px;
+}
+#weather-info p > span {
+  color: rgba(217, 217, 217, 0.6);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+#weather-info p {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+#weather-info > #tempAndIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#tempAndIcon > .temp {
+  font-size: 3rem;
+  font-weight: bold;
+  text-wrap: none;
+}
+#tempAndIcon > canvas {
+  width: 60%;
+  height: auto;
+}
+
+#weather-info > #details {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.5);
+
+  width: 100%;
+
+  gap: 16px;
+}
+
+#weather-info > :not(:first-child) {
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+#weather-info > #temps,
+#weather-info > #conditions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 2fr;
+
+  align-items: center;
+  justify-items: center;
+
+  column-gap: 16px;
+  row-gap: 8px;
+
+  font-size: 1.25rem;
+}
+
+#temps > .feels-like,
+#conditions > .winds {
+  grid-column: 1/3;
+}
+
 #options {
   justify-self: self-start;
   border-radius: 0 24px 24px 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 1.25rem;
+  color: white;
+}
+
+#options > #tempSwitch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
 #week-forecast {

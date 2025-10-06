@@ -23,7 +23,7 @@ const processor = (function () {
 
   document.querySelector('body').appendChild(bgImg);
 
-  var skycons = new Skycons({ color: 'black' });
+  var skycons = new Skycons({ color: 'white' });
   skycons.play();
 
   let location = 'Iasi';
@@ -35,6 +35,11 @@ const processor = (function () {
         location = search.value;
         updatePage(location);
       }
+    });
+
+    const measurementToggle = options.querySelector('.switch > input');
+    measurementToggle.addEventListener('change', () => {
+      console.log(measurementToggle.checked);
     });
   };
 

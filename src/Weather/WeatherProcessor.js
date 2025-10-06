@@ -6,7 +6,15 @@ export default class WeatherProcessor {
     'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/';
 
   static fahToCel(fah) {
-    return (fah - 32) / (9 / 5);
+    return Number((fah - 32) / (9 / 5)).toFixed(1);
+  }
+
+  static inchToMM(inch) {
+    return Number(inch * 2.54).toFixed(1);
+  }
+
+  static mphToKmh(mph) {
+    return Number(mph * 1.60934).toFixed(1);
   }
 
   static async getLocationJSON(location) {

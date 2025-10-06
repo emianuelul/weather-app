@@ -14,7 +14,7 @@ export default class DomStuff {
 
   static createP = (content) => {
     const p = document.createElement('p');
-    p.textContent = content;
+    p.innerHTML = content;
 
     return p;
   };
@@ -35,12 +35,12 @@ export default class DomStuff {
   };
 
   static #canvases = 1;
-  static createCanvas = (height, width) => {
+  static createCanvas = () => {
     const canvas = document.createElement('canvas');
     canvas.id = `icon${this.#canvases}`;
     this.#canvases++;
-    canvas.width = width;
-    canvas.height = height;
+    // canvas.width = width;
+    // canvas.height = height;
 
     return canvas;
   };
@@ -65,104 +65,108 @@ export default class DomStuff {
 
   static createWeatherInfo = (json) => {
     const div = DomStuff.createDiv('#weather-info');
-    const icon = DomStuff.createCanvas(128, 128);
+    const icon = DomStuff.createCanvas();
     const temp = DomStuff.createP(
-      `${WeatherProcessor.fahToCel(json.currentConditions.temp).toFixed(1)} C`
+      `${WeatherProcessor.fahToCel(json.currentConditions.temp)} °C`
     );
     temp.classList.add('temp');
 
-    const address = DomStuff.createP(json.resolvedAddress);
+    const address = DomStuff.createP('📍' + json.resolvedAddress);
     address.classList.add('address');
 
     const condition = DomStuff.createP(json.currentConditions.conditions);
     condition.classList.add('condition');
 
     const min = DomStuff.createP(
-      `Today Minimum: ${WeatherProcessor.fahToCel(json.days[0].tempmin).toFixed(1)} C`
+      `<span>Today Minimum:</span> ${WeatherProcessor.fahToCel(json.days[0].tempmin)} °C`
     );
     min.classList.add('min');
     const max = DomStuff.createP(
-      `Today Maximum: ${WeatherProcessor.fahToCel(json.days[0].tempmax).toFixed(1)} C`
+      `<span>Today Maximum:</span> ${WeatherProcessor.fahToCel(json.days[0].tempmax)} °C`
     );
     max.classList.add('max');
 
     const feelsLike = DomStuff.createP(
-      `Feels Like: 
-      ${WeatherProcessor.fahToCel(json.currentConditions.feelslike).toFixed(1)} C`
+      `<span>Feels Like:</span> 
+      ${WeatherProcessor.fahToCel(json.currentConditions.feelslike)} °C`
     );
     feelsLike.classList.add('feels-like');
 
-    const sunrise = DomStuff.createP(`Sun rises at ${json.currentConditions.sunrise}`);
-    sunrise.classList.add('sunrise');
-
-    const sunset = DomStuff.createP(`Sun sets at ${json.currentConditions.sunset}`);
-    sunset.classList.add('sunset');
-
     const precipCh = DomStuff.createP(
-      `Precipitation Chances: ${json.currentConditions.precipprob}`
+      `<span>Precipitation Chances:</span> ${json.currentConditions.precipprob}%`
     );
     precipCh.classList.add('precip-chance');
 
     const precip = DomStuff.createP(
-      `Precipitation : ${json.currentConditions.precip} mm`
+      `<span>Precipitation:</span> ${WeatherProcessor.inchToMM(
+        json.currentConditions.precip
+      )} mm`
     );
     precip.classList.add('precip');
 
-    div.append(
-      icon,
-      temp,
-      address,
-      condition,
-      min,
-      max,
-      feelsLike,
-      sunrise,
-      sunset,
-      precipCh,
-      precip
+    const winds = DomStuff.createP(
+      `<span>Wind Speeds:</span> ${WeatherProcessor.mphToKmh(
+        json.currentConditions.windspeed
+      )} km/h`
     );
+    winds.classList.add('winds');
+
+    const tempDiv = DomStuff.createDiv('#tempAndIcon');
+    const details = DomStuff.createDiv('#details');
+    const temps = DomStuff.createDiv('#temps');
+    const conditions = DomStuff.createDiv('#conditions');
+
+    tempDiv.append(icon, temp);
+    details.append(address, condition);
+    temps.append(min, max, feelsLike);
+    conditions.append(precipCh, precip, winds);
+
+    div.append(tempDiv, details, temps, conditions);
 
     return div;
   };
 
   static updateWeatherInfo = (json) => {
-    const temp = document.querySelector('#weather-info > .temp');
-    const address = document.querySelector('#weather-info > .address');
-    const condition = document.querySelector('#weather-info > .condition');
-    const min = document.querySelector('#weather-info > .min');
-    const max = document.querySelector('#weather-info > .max');
-    const feelsLike = document.querySelector('#weather-info > .feels-like');
-    const sunrise = document.querySelector('#weather-info > .sunrise');
-    const sunset = document.querySelector('#weather-info > .sunset');
-    const precipChance = document.querySelector('#weather-info > .precip-chance');
-    const precip = document.querySelector('#weather-info > .precip');
+    const temp = document.querySelector('#weather-info > * > .temp');
+    const address = document.querySelector('#weather-info > * > .address');
+    const condition = document.querySelector('#weather-info > * > .condition');
+    const min = document.querySelector('#weather-info > * > .min');
+    const max = document.querySelector('#weather-info > * > .max');
+    const feelsLike = document.querySelector('#weather-info > * > .feels-like');
+    const precipChance = document.querySelector('#weather-info > * > .precip-chance');
+    const precip = document.querySelector('#weather-info > * > .precip');
+    const winds = document.querySelector('#weather-info > * > .winds');
 
-    temp.textContent = `${WeatherProcessor.fahToCel(json.currentConditions.temp).toFixed(
-      1
-    )} C`;
-    address.textContent = json.resolvedAddress;
-    condition.textContent = json.currentConditions.conditions;
-    min.textContent = `Today Minimum: ${WeatherProcessor.fahToCel(
+    temp.innerHTML = `${WeatherProcessor.fahToCel(json.currentConditions.temp)} °C`;
+    address.innerHTML = '📍' + json.resolvedAddress;
+    condition.innerHTML = json.currentConditions.conditions;
+    min.innerHTML = `<span>Today Minimum:</span> ${WeatherProcessor.fahToCel(
       json.days[0].tempmin
-    ).toFixed(1)} C`;
-    max.textContent = `Today Maximum: ${WeatherProcessor.fahToCel(
+    )} °C`;
+    max.innerHTML = `<span>Today Maximum:</span> ${WeatherProcessor.fahToCel(
       json.days[0].tempmax
-    ).toFixed(1)} C`;
-    feelsLike.textContent = `Feels Like: 
-      ${WeatherProcessor.fahToCel(json.currentConditions.feelslike).toFixed(1)} C`;
-    sunrise.textContent = `Sun rises at ${json.currentConditions.sunrise}`;
-    sunset.textContent = `Sun sets at ${json.currentConditions.sunset}`;
-    precipChance.textContent = `Precipitation Chances: ${json.currentConditions.precipprob}`;
-    precip.textContent = `Precipitation : ${json.currentConditions.precip} mm`;
+    )} °C`;
+    feelsLike.innerHTML = `<span>Feels Like:</span> 
+      ${WeatherProcessor.fahToCel(json.currentConditions.feelslike)} °C`;
+    winds.innerHTML = `<span>Wind Speed:</span> ${json.currentConditions.windspeed}`;
+    precipChance.innerHTML = `<span>Precipitation Chances:</span> ${json.currentConditions.precipprob}%`;
+    precip.innerHTML = `<span>Precipitation:</span> ${json.currentConditions.precip} mm`;
   };
 
   static createOptions = () => {
     const div = DomStuff.createDiv('#options');
     const search = document.createElement('input');
     search.type = 'search';
+    search.placeholder = 'Search for a Location...';
     const toggle = DomStuff.createToggleSwitch();
+    const toggleLabel = DomStuff.createP('Temperature Measurement');
+    const cel = DomStuff.createP('°C');
+    const fah = DomStuff.createP('°F');
 
-    div.append(search, toggle);
+    const changeMeasureContainer = DomStuff.createDiv('#tempSwitch');
+    changeMeasureContainer.append(cel, toggle, fah);
+
+    div.append(search, toggleLabel, changeMeasureContainer);
 
     return div;
   };

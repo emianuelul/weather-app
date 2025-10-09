@@ -3,6 +3,29 @@ body {
   overflow: hidden;
 }
 
+footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  opacity: 0;
+
+  transition: 0.5s;
+}
+
+footer:hover {
+  opacity: 1;
+}
+
+footer > a {
+  color: white;
+}
+
 #bg-img {
   position: absolute;
   z-index: -1;
@@ -67,8 +90,10 @@ body {
   text-wrap: none;
 }
 #tempAndIcon > canvas {
-  width: 60%;
-  height: auto;
+  height: 128px;
+  width: auto;
+  max-width: 256px;
+  min-width: 200px;
 }
 
 #weather-info > #details {
@@ -86,7 +111,7 @@ body {
 }
 
 #weather-info > :not(:first-child) {
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 12px;
 }
@@ -99,6 +124,8 @@ body {
 
   align-items: center;
   justify-items: center;
+
+  width: 100%;
 
   column-gap: 16px;
   row-gap: 8px;
@@ -136,4 +163,46 @@ body {
 #week-forecast {
   justify-self: self-end;
   border-radius: 24px 0 0 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+#week-forecast canvas {
+  height: 48px;
+  width: auto;
+}
+
+#week-forecast > .forecastDay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: white;
+  font-weight: bold;
+
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 8px 12px;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+#week-forecast > .forecastDay > .temp {
+  font-size: 1.5rem;
+}
+
+#week-forecast > .forecastDay > .curr-day {
+  color: rgba(256, 256, 256, 0.6);
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+#week-forecast > .forecastDay.selected {
+  transform: translateX(-7.5%);
+  background-color: rgba(0, 0, 0, 0.4);
 }

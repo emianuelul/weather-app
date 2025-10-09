@@ -71,30 +71,66 @@ const processor = (function () {
 
   const updatePage = async (location) => {
     const locationData = await WeatherProcessor.getLocationJSON(location);
-
     const icon = locationData.currentConditions.icon;
 
-    DomStuff.updateWeatherInfo(locationData);
+    document.querySelector('#weather-info').remove();
+    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0);
+
+    document.querySelector('#week-forecast').remove();
+    const weekForecast = DomStuff.createDiv('#week-forecast');
+
+    app.append(weatherInfo, weekForecast);
+    loadWeekForecast(weekForecast, locationData);
 
     updateBg(icon);
 
     skycons.set('icon1', icon);
   };
 
+  const displayClickedDay = (currDayDetails, day) => {
+    const weatherInfo = document.querySelector('#weather-info');
+    weatherInfo.remove();
+
+    const newWeatherInfo = DomStuff.createWeatherInfo(currDayDetails, day);
+    app.insertBefore(newWeatherInfo, document.getElementById('week-forecast'));
+    console.log(document.querySelector('#icon1'));
+    skycons.set(`icon1`, currDayDetails.days[day].icon);
+  };
+
+  const loadWeekForecast = (forecastDiv, locationData) => {
+    for (let i = 0; i <= 7; i++) {
+      const forecast = DomStuff.createWeatherDay(locationData.days[i], i);
+      if (i == 0) {
+        forecast.classList.add('selected');
+      }
+      forecastDiv.append(forecast);
+
+      forecast.addEventListener('click', (event) => {
+        [...document.querySelectorAll('.forecastDay')].forEach((item) =>
+          item.classList.remove('selected')
+        );
+        forecast.classList.add('selected');
+        displayClickedDay(locationData, i);
+      });
+
+      skycons.add(`icon${i + 2}`, locationData.days[i].icon);
+    }
+  };
+
   const processWeatherJSON = async () => {
     const locationData = await WeatherProcessor.getLocationJSON(location);
     const icon = locationData.currentConditions.icon;
+    console.log(locationData);
 
     updateBg(icon);
 
     const options = DomStuff.createOptions(locationData);
-    optionsEvents(options);
-
-    const weatherInfo = DomStuff.createWeatherInfo(locationData);
+    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0);
     const weekForecast = DomStuff.createDiv('#week-forecast');
     app.append(options, weatherInfo, weekForecast);
 
-    console.log(locationData);
+    optionsEvents(options);
+    loadWeekForecast(weekForecast, locationData);
 
     skycons.add('icon1', icon);
   };

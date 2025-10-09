@@ -72,6 +72,8 @@ footer > a {
   color: rgba(217, 217, 217, 0.6);
   font-weight: 600;
   font-size: 1.25rem;
+
+  display: block;
 }
 #weather-info p {
   text-align: center;
@@ -155,9 +157,32 @@ footer > a {
 
 #options > #tempSwitch {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 16px;
+
+  width: 100%;
+
+  font-size: 2rem;
+
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 8px 16px;
+}
+
+#options > input[type='search'] {
+  border-radius: 12px;
+  padding: 4px 8px;
+  text-align: center;
+  outline: 4px solid rgb(33, 150, 243, 0);
+
+  transition: 0.25s ease;
+
+  border: 0;
+}
+#options > input[type='search']:focus {
+  outline: 4px solid rgb(33, 150, 243, 1);
+  box-shadow: 8px 8px 20px rgb(33, 150, 243, 0.5);
 }
 
 #week-forecast {
@@ -167,7 +192,7 @@ footer > a {
   display: flex;
   flex-direction: column;
 
-  gap: 12px;
+  gap: 16px;
 }
 
 #week-forecast canvas {
@@ -205,4 +230,28 @@ footer > a {
 #week-forecast > .forecastDay.selected {
   transform: translateX(-7.5%);
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.errorToast {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  background: rgb(213, 97, 97);
+  padding: 16px 32px;
+  border-radius: 12px;
+
+  font-size: 1.75rem;
+
+  margin: 32px;
+
+  transition: 0.5s ease-in;
+}
+
+.errorToast.moving {
+  transform: translateX(-600%);
+}
+
+.errorToast.ending {
+  transform: translateX(200%);
 }

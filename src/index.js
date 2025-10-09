@@ -21,17 +21,22 @@ const processor = (function () {
   const bgImg = document.createElement('img');
   bgImg.id = 'bg-img';
 
+  // 'metric' or 'us'
+  let unitGroup = 'metric';
+
   document.querySelector('body').appendChild(bgImg);
 
   var skycons = new Skycons({ color: 'white' });
   skycons.play();
 
-  let location = 'Iasi';
+  let location = 'London';
 
   const optionsEvents = (options) => {
     const search = options.querySelector('input[type="search"]');
     search.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !event.repeat) {
+      if (event.key === 'Enter' && !event.repeat && search.value === '') {
+        // ERROR TOAST
+      } else if (event.key === 'Enter' && !event.repeat) {
         location = search.value;
         updatePage(location);
       }
@@ -39,7 +44,13 @@ const processor = (function () {
 
     const measurementToggle = options.querySelector('.switch > input');
     measurementToggle.addEventListener('change', () => {
-      console.log(measurementToggle.checked);
+      if (!measurementToggle.checked) {
+        unitGroup = 'metric';
+      } else {
+        unitGroup = 'us';
+      }
+
+      updatePage(location);
     });
   };
 
@@ -70,11 +81,31 @@ const processor = (function () {
   };
 
   const updatePage = async (location) => {
-    const locationData = await WeatherProcessor.getLocationJSON(location);
+    const locationData = await WeatherProcessor.getLocationJSON(location, unitGroup);
+    if (locationData === 'error') {
+      if (!document.querySelector('.errorToast')) {
+        const toast = DomStuff.createErrorToast('Location is invalid, check for typos');
+        toast.classList.add('moving');
+        document.querySelector('body').appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.remove('moving');
+
+          setTimeout(() => {
+            toast.classList.add('ending');
+            setTimeout(() => {
+              toast.remove();
+            }, 500);
+          }, 3000);
+        }, 500);
+      }
+
+      return;
+    }
     const icon = locationData.currentConditions.icon;
 
     document.querySelector('#weather-info').remove();
-    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0);
+    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0, unitGroup);
 
     document.querySelector('#week-forecast').remove();
     const weekForecast = DomStuff.createDiv('#week-forecast');
@@ -91,15 +122,14 @@ const processor = (function () {
     const weatherInfo = document.querySelector('#weather-info');
     weatherInfo.remove();
 
-    const newWeatherInfo = DomStuff.createWeatherInfo(currDayDetails, day);
+    const newWeatherInfo = DomStuff.createWeatherInfo(currDayDetails, day, unitGroup);
     app.insertBefore(newWeatherInfo, document.getElementById('week-forecast'));
-    console.log(document.querySelector('#icon1'));
     skycons.set(`icon1`, currDayDetails.days[day].icon);
   };
 
   const loadWeekForecast = (forecastDiv, locationData) => {
     for (let i = 0; i <= 7; i++) {
-      const forecast = DomStuff.createWeatherDay(locationData.days[i], i);
+      const forecast = DomStuff.createWeatherDay(locationData.days[i], unitGroup);
       if (i == 0) {
         forecast.classList.add('selected');
       }
@@ -117,15 +147,16 @@ const processor = (function () {
     }
   };
 
-  const processWeatherJSON = async () => {
-    const locationData = await WeatherProcessor.getLocationJSON(location);
+  const initPage = async () => {
+    const locationData = await WeatherProcessor.getLocationJSON(location, unitGroup);
+
     const icon = locationData.currentConditions.icon;
     console.log(locationData);
 
     updateBg(icon);
 
     const options = DomStuff.createOptions(locationData);
-    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0);
+    const weatherInfo = DomStuff.createWeatherInfo(locationData, 0, unitGroup);
     const weekForecast = DomStuff.createDiv('#week-forecast');
     app.append(options, weatherInfo, weekForecast);
 
@@ -135,5 +166,5 @@ const processor = (function () {
     skycons.add('icon1', icon);
   };
 
-  processWeatherJSON();
+  initPage();
 })();

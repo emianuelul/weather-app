@@ -62,7 +62,7 @@ export default class DomStuff {
     return label;
   };
 
-  static createWeatherDay = (day) => {
+  static createWeatherDay = (day, unitGroup) => {
     let currDay;
     switch (getDay(day.datetime)) {
       case 1: {
@@ -97,7 +97,7 @@ export default class DomStuff {
 
     const div = DomStuff.createDiv('.forecastDay');
     const canvas = DomStuff.createCanvas();
-    const temp = DomStuff.createP(`${WeatherProcessor.fahToCel(day.temp)} °C`);
+    const temp = DomStuff.createP(`${day.temp} °C`);
     temp.classList.add('temp');
     const dayP = DomStuff.createP(currDay);
     dayP.classList.add('curr-day');
@@ -107,11 +107,13 @@ export default class DomStuff {
     return div;
   };
 
-  static createWeatherInfo = (json, day) => {
+  static createWeatherInfo = (json, day, unitGroup) => {
     const div = DomStuff.createDiv('#weather-info');
     this.#canvases = 1;
     const icon = DomStuff.createCanvas();
-    const temp = DomStuff.createP(`${WeatherProcessor.fahToCel(json.days[day].temp)} °C`);
+    const temp = DomStuff.createP(
+      WeatherProcessor.formatValue(json.days[day].temp, 'temp', unitGroup)
+    );
     temp.classList.add('temp');
 
     const address = DomStuff.createP('📍' + json.resolvedAddress);
@@ -121,38 +123,37 @@ export default class DomStuff {
     condition.classList.add('condition');
 
     const min = DomStuff.createP(
-      `<span>Today Minimum:</span> ${WeatherProcessor.fahToCel(
-        json.days[day].tempmin
-      )} °C`
+      `<span>Today Minimum:</span>` +
+        WeatherProcessor.formatValue(json.days[day].tempmin, 'temp', unitGroup)
     );
     min.classList.add('min');
     const max = DomStuff.createP(
-      `<span>Today Maximum:</span> ${WeatherProcessor.fahToCel(
-        json.days[day].tempmax
-      )} °C`
+      `<span>Today Maximum:</span>` +
+        WeatherProcessor.formatValue(json.days[day].tempmax, 'temp', unitGroup)
     );
     max.classList.add('max');
 
     const feelsLike = DomStuff.createP(
-      `<span>Feels Like:</span> 
-      ${WeatherProcessor.fahToCel(json.days[day].feelslike)} °C`
+      `<span>Feels Like:</span>` +
+        WeatherProcessor.formatValue(json.days[day].feelslike, 'temp', unitGroup)
     );
     feelsLike.classList.add('feels-like');
 
     const precipCh = DomStuff.createP(
-      `<span>Precipitation Chances:</span> ${json.days[day].precipprob}%`
+      `<span>Precipitation Chances:</span>` +
+        WeatherProcessor.formatValue(json.days[day].precipprob, 'precip', unitGroup)
     );
     precipCh.classList.add('precip-chance');
 
     const precip = DomStuff.createP(
-      `<span>Precipitation:</span> ${WeatherProcessor.inchToMM(json.days[day].precip)} mm`
+      `<span>Precipitation:</span>` +
+        WeatherProcessor.formatValue(json.days[day].precip, 'precip', unitGroup)
     );
     precip.classList.add('precip');
 
     const winds = DomStuff.createP(
-      `<span>Wind Speeds:</span> ${WeatherProcessor.mphToKmh(
-        json.days[day].windspeed
-      )} km/h`
+      `<span>Wind Speeds:</span>` +
+        WeatherProcessor.formatValue(json.days[day].windspeed, 'wind', unitGroup)
     );
     winds.classList.add('winds');
 
@@ -177,14 +178,23 @@ export default class DomStuff {
     search.type = 'search';
     search.placeholder = 'Search for a Location...';
     const toggle = DomStuff.createToggleSwitch();
-    const toggleLabel = DomStuff.createP('Temperature Measurement');
-    const cel = DomStuff.createP('°C');
-    const fah = DomStuff.createP('°F');
+    const toggleLabel = DomStuff.createP('Units');
+    const cel = DomStuff.createP('Metric');
+    const fah = DomStuff.createP('US');
 
     const changeMeasureContainer = DomStuff.createDiv('#tempSwitch');
     changeMeasureContainer.append(cel, toggle, fah);
 
     div.append(search, toggleLabel, changeMeasureContainer);
+
+    return div;
+  };
+
+  static createErrorToast = (msg) => {
+    const div = DomStuff.createDiv('.errorToast');
+    const textContent = DomStuff.createP(msg);
+
+    div.appendChild(textContent);
 
     return div;
   };

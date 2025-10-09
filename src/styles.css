@@ -3,6 +3,10 @@ body {
   overflow: hidden;
 }
 
+p {
+  font-family: alteHaas;
+}
+
 footer {
   position: fixed;
   width: 100%;
@@ -38,7 +42,7 @@ footer > a {
 
 #app {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, 33.3%);
   grid-template-rows: 100vh;
 
   justify-items: center;
@@ -155,6 +159,11 @@ footer > a {
   color: white;
 }
 
+#options > p {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 #options > #tempSwitch {
   display: flex;
   justify-content: space-between;
@@ -166,6 +175,8 @@ footer > a {
   font-size: 2rem;
 
   background: rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+
   border-radius: 12px;
   padding: 8px 16px;
 }
@@ -230,6 +241,7 @@ footer > a {
 #week-forecast > .forecastDay.selected {
   transform: translateX(-7.5%);
   background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .errorToast {

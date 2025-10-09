@@ -1,6 +1,7 @@
 import './cssReset.css';
 import './styles.css';
 import './toggleSwitch.css';
+import './fonts/stylesheet.css';
 
 import Cloudy from './imgs/weather-conditions/cloudy.jpg';
 import LightRain from './imgs/weather-conditions/light-rain.jpg';
